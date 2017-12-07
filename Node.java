@@ -31,12 +31,12 @@ public class Node
 		return data;
 	}
 	
-	public Node getLeftNode(){
+	public Node left(){
 		return left;
 		
 	}
 	
-	public Node getRightNode(){
+	public Node right(){
 		return right;
 	}
 	
@@ -65,4 +65,10 @@ public class Node
 			System.out.println(e);
 		}
 	}
+	
+	public boolean isLeaf(){
+	    return isLeaf;
+	
+	   }
+   
 }
