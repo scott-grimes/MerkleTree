@@ -23,7 +23,6 @@ public class MerkleTree
                 
         }
         
-        // if there was an odd number, the last node is doubled up
         if(data.length%2==1){
             row[row.length-1] = new Node(data[data.length-1]);
         }
@@ -65,35 +64,67 @@ public class MerkleTree
     }
     
        // returns data at node x, and the hashes of all branches leading to the node
-    public String get(int x){
+    public String verifyData(int x){
         if(x>=size) return null;
         String ans = "";
         int depth = 0; 
         Node current = root;
         
         ans+= b2h(current.getHash())+"\n";// the root hash
-        
         // the low and high leaf x-values of each branch at the current depth
         int low = 0;
         int high = size-1;
         while(!current.isLeaf()){
             ans+= b2h(current.left().getHash())+" , "+b2h(current.right().getHash())+"\n";
-            int mid = (high-low)/2;
-            if(x<=mid)
+            int mid = low + (high - low)/2;
+            
+            if(x<=mid){
+                high = mid;
                 current = current.left();
-            else
+            }
+            else{
+                low = mid+1;
                 current = current.right();
+            }
             
         }
         
         ans+= b2h(current.getData());
-        
-        
-        
-        
         return ans;
         
     }
+    
+    //only returns the data at leaf node x
+    public String getData(int x){
+        if(x>=size) return null;
+        String ans = "";
+        int depth = 0; 
+        Node current = root;
+        
+        
+        // the low and high leaf x-values of each branch at the current depth
+        int low = 0;
+        int high = size-1;
+        while(!current.isLeaf()){
+            
+            int mid = low + (high - low)/2;
+            
+            if(x<=mid){
+                high = mid;
+                current = current.left();
+            }
+            else{
+                low = mid+1;
+                current = current.right();
+            }
+            
+        }
+        
+        ans+= b2h(current.getData());
+        return ans;
+        
+    }
+    
     
     
     public static String b2h(byte[] bytes) {
@@ -105,6 +136,8 @@ public class MerkleTree
         }
     return new String(hexChars);
 }
+
+    
     
     
 }
